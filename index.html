@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For You, My Angel 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a0a0a 100%);
+            color: white;
+        }
+
+        /* Screen Container */
+        .screens-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.95);
+            overflow-y: auto;
+        }
+
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .screen.exit-left {
+            transform: translateX(-100%) scale(0.9);
+            opacity: 0;
+        }
+
+        .screen.enter-right {
+            transform: translateX(100%);
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .tulip-float, .heart-float {
+            position: absolute;
+            bottom: -100px;
+            animation: floatUp linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b8a, #ff8fa3, #ffb6c1);
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px #ff6b8a;
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #ff6b8a;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px #ff6b8a;
+        }
+
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: fixed;
+            bottom: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,107,138,0.2);
+            border: 2px solid rgba(255,107,138,0.5);
+            color: #ff6b8a;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255,107,138,0.4);
+            transform: scale(1.1);
+        }
+
+        .nav-arrow.prev { left: 20px; }
+        .nav-arrow.next { right: 20px; }
+
+        .nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Typography */
+        .script-text {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .elegant-text {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #ff6b8a, #ff8fa3, #ffb6c1, #ff8fa3, #ff6b8a);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Heartbeat Animation */
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.05); }
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Glow Animation */
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,107,138,0.5); }
+            50% { box-shadow: 0 0 40px rgba(255,107,138,0.8), 0 0 60px rgba(255,107,138,0.4); }
+        }
+
+        /* ============================================
+           SCREEN 1: INTRO - Tulip Bloom
+        ============================================ */
+        .intro-content {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .tulip-bloom {
+            width: 120px;
+            height: 180px;
+            margin-bottom: 30px;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .intro-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255,182,193,0.9);
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.5s;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .intro-title {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.8s;
+            letter-spacing: 2px;
+        }
+
+        .intro-message {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 400px;
+            line-height: 1.9;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 1.1s;
+            font-weight: 300;
+        }
+
+        .tap-hint {
+            position: absolute;
+            bottom: 100px;
+            font-size: 0.9rem;
+            color: rgba(255,182,193,0.6);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================
+           SCREEN 2: My Angel
+        ============================================ */
+        .angel-container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .angel-title {
+            font-size: 2rem;
+            color: #ffb6c1;
+            margin-bottom: 20px;
+        }
+
+        .angel-name {
+            font-size: 4.5rem;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        .angel-name:hover {
+            transform: scale(1.05);
+        }
+
+        .angel-name .wings {
+            position: absolute;
+            font-size: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.8;
+            animation: flutter 2s ease-in-out infinite;
+        }
+
+        .angel-name .wings.left { left: -50px; }
+        .angel-name .wings.right { right: -50px; transform: translateY(-50%) scaleX(-1); }
+
+        @keyframes flutter {
+            0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+            50% { transform: translateY(-50%) rotate(5deg); }
+        }
+
+        .angel-subtitle {
+            font-size: 1.5rem;
+            color: #ff8fa3;
+            margin-bottom: 30px;
+        }
+
+        .tap-angel-hint {
+            font-size: 0.9rem;
+            color: rgba(255,182,193,0.7);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Flying Angels */
+        .flying-angel {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 1000;
+            animation: flyAway 2s ease-out forwards;
+        }
+
+        @keyframes flyAway {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { opacity: 1; }
+            100% { transform: scale(1.5) rotate(360deg) translateY(-500px); opacity: 0; }
+        }
+
+        /* ============================================
+           SCREEN 3: Naomi Sharon Vinyl
+        ============================================ */
+        .vinyl-container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .vinyl-intro {
+            font-size: 1rem;
+            color: #ffb6c1;
+            margin-bottom: 30px;
+            max-width: 350px;
+        }
+
+        .vinyl-wrapper {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 30px;
+        }
+
+        .vinyl {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .vinyl.playing {
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65%;
+            height: 65%;
+            border-radius: 50%;
+            background: url('cover.jpg') center/cover;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border: 3px solid rgba(255,255,255,0.1);
+        }
+
+        .vinyl::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12%;
+            height: 12%;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 2px solid #444;
+        }
+
+        .vinyl-grooves {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: repeating-radial-gradient(
+                circle at center,
+                transparent 0px,
+                transparent 2px,
+                rgba(255,255,255,0.03) 2px,
+                rgba(255,255,255,0.03) 3px
+            );
+        }
+
+        .vinyl-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .vinyl-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #ff6b8a;
+            background: rgba(255,107,138,0.1);
+            color: #ff6b8a;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vinyl-btn:hover {
+            background: rgba(255,107,138,0.3);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,107,138,0.5);
+        }
+
+        .vinyl-btn.play-btn {
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+        }
+
+        .song-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .song-artist {
+            font-size: 0.9rem;
+            color: #ff8fa3;
+        }
+
+        /* ============================================
+           SCREEN 4-7: Love Messages
+        ============================================ */
+        .message-screen {
+            text-align: center;
+            z-index: 10;
+            padding: 40px 20px;
+        }
+
+        .message-icon {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .message-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            line-height: 1.8;
+            max-width: 500px;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 25px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .message-text .highlight {
+            color: #ff8fa3;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .message-subtitle {
+            font-size: 1rem;
+            color: rgba(255,182,193,0.8);
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* ============================================
+           SCREEN 8: Photo Slideshow
+        ============================================ */
+        .gallery-screen {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 20px;
+        }
+
+        .gallery-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .gallery-subtitle {
+            text-align: center;
+            color: #ffb6c1;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        /* Photo Slideshow Container */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            height: 400px;
+            perspective: 1000px;
+        }
+
+        .photo-slide {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 280px;
+            height: 350px;
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .photo-slide.active {
+            transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            opacity: 1;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .photo-slide.prev {
+            transform: translate(-130%, -50%) scale(0.7) rotate(-8deg);
+            opacity: 0.4;
+            z-index: 5;
+        }
+
+        .photo-slide.next {
+            transform: translate(30%, -50%) scale(0.7) rotate(8deg);
+            opacity: 0.4;
+            z-index: 5;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow:
+                0 25px 60px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: photoShine 3s ease-in-out infinite;
+        }
+
+        @keyframes photoShine {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* Photo Caption */
+        .photo-caption {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #ffb6c1;
+            font-style: italic;
+        }
+
+        /* Slideshow Dots */
+        .slideshow-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .slide-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slide-dot.active {
+            background: #ff6b8a;
+            transform: scale(1.3);
+        }
+
+        /* Slideshow Controls */
+        .slideshow-controls {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .slide-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,107,138,0.5);
+            background: rgba(255,107,138,0.1);
+            color: #ff6b8a;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-btn:hover {
+            background: rgba(255,107,138,0.3);
+            transform: scale(1.1);
+        }
+
+        /* ============================================
+           SCREEN 9: Love Letter
+        ============================================ */
+        .letter-screen {
+            z-index: 10;
+            padding: 40px 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .letter-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ff8fa3;
+        }
+
+        .letter-container {
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 0 auto 100px;
+            border: 1px solid rgba(255,182,193,0.2);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .letter-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #ffb6c1;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,182,193,0.2);
+        }
+
+        .letter-content {
+            font-size: 1rem;
+            line-height: 2;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .letter-content p {
+            margin-bottom: 15px;
+        }
+
+        .letter-signature {
+            margin-top: 25px;
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: #ff6b8a;
+            text-align: right;
+        }
+
+        /* ============================================
+           SCREEN 10: The Question
+        ============================================ */
+        .question-screen {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .tulip-decoration {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tulip-decoration svg {
+            width: 50px;
+            height: 70px;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        .tulip-decoration svg:nth-child(2) { animation-delay: 0.3s; }
+        .tulip-decoration svg:nth-child(3) { animation-delay: 0.6s; }
+
+        .question-name {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .heart-divider {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .heart-divider span {
+            font-size: 1.5rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .heart-divider span:nth-child(2) { animation-delay: 0.2s; }
+        .heart-divider span:nth-child(3) { animation-delay: 0.4s; }
+
+        .question-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: white;
+            margin: 25px 0;
+            text-shadow: 0 0 30px rgba(255,107,138,0.5);
+        }
+
+        .promise-text {
+            color: #ffb6c1;
+            font-size: 1rem;
+            margin-bottom: 35px;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 80px;
+        }
+
+        .btn-yes {
+            padding: 18px 60px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff6b8a, #ff8fa3);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,138,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(255,107,138,0.6);
+        }
+
+        .btn-yes::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: btnShine 2s infinite;
+        }
+
+        @keyframes btnShine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .btn-no {
+            padding: 15px 40px;
+            border: 1px solid rgba(255,182,193,0.3);
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            color: #ffb6c1;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+        }
+
+        /* ============================================
+           SCREEN 11: Celebration
+        ============================================ */
+        .celebration-screen {
+            text-align: center;
+            z-index: 10;
+            padding: 40px 20px;
+            background: radial-gradient(ellipse at center, rgba(255,107,138,0.1) 0%, transparent 70%);
+            border-radius: 30px;
+            max-width: 500px;
+        }
+
+        .celebration-icon {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .celebration-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: #ff6b8a;
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(255,107,138,0.5);
+            letter-spacing: 2px;
+        }
+
+        .celebration-message {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            line-height: 2;
+            max-width: 400px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        .celebration-message .name {
+            display: block;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: #ff6b8a;
+            margin: 20px 0;
+            font-weight: 400;
+        }
+
+        .celebration-footer {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #ffb6c1;
+        }
+
+        .celebration-tulips {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            font-size: 2.5rem;
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ============================================
+           Mobile Responsive
+        ============================================ */
+        @media (max-width: 768px) {
+            .intro-title, .angel-name, .question-name {
+                font-size: 2.6rem;
+            }
+
+            .intro-subtitle, .angel-title {
+                font-size: 1rem;
+            }
+
+            .intro-message {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+
+            .message-text {
+                font-size: 1.3rem;
+                padding: 0 10px;
+            }
+
+            .message-icon {
+                font-size: 3rem;
+            }
+
+            .question-text {
+                font-size: 1.8rem;
+            }
+
+            .nav-dots {
+                display: none;
+            }
+
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                bottom: 15px;
+                font-size: 16px;
+            }
+
+            .nav-arrow.prev { left: 15px; }
+            .nav-arrow.next { right: 15px; }
+
+            .vinyl-wrapper {
+                width: 240px;
+                height: 240px;
+            }
+
+            .vinyl-intro {
+                font-size: 0.95rem;
+                padding: 0 20px;
+            }
+
+            .song-title {
+                font-size: 1.1rem;
+            }
+
+            .vinyl-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .vinyl-btn.play-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .slideshow-container {
+                height: 350px;
+            }
+
+            .photo-slide {
+                width: 240px;
+                height: 300px;
+            }
+
+            .photo-caption {
+                font-size: 1rem;
+            }
+
+            .gallery-title {
+                font-size: 2rem;
+            }
+
+            .letter-container {
+                padding: 20px 15px;
+                margin: 0 10px 80px;
+            }
+
+            .letter-title {
+                font-size: 1.6rem;
+            }
+
+            .letter-header {
+                font-size: 1.1rem;
+            }
+
+            .letter-content {
+                font-size: 0.95rem;
+                line-height: 1.8;
+            }
+
+            .letter-signature {
+                font-size: 1.5rem;
+            }
+
+            .celebration-screen {
+                padding: 30px 15px;
+            }
+
+            .celebration-title {
+                font-size: 2.8rem;
+            }
+
+            .celebration-message {
+                font-size: 1.1rem;
+            }
+
+            .celebration-message .name {
+                font-size: 1.8rem;
+            }
+
+            .celebration-icon {
+                font-size: 4rem;
+            }
+
+            .btn-yes {
+                padding: 15px 45px;
+                font-size: 1.1rem;
+            }
+
+            .btn-no {
+                padding: 12px 30px;
+                font-size: 0.9rem;
+            }
+
+            .angel-name .wings {
+                display: none;
+            }
+
+            .tulip-decoration svg {
+                width: 40px;
+                height: 55px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .intro-title, .angel-name, .question-name {
+                font-size: 2.2rem;
+            }
+
+            .message-text {
+                font-size: 1.15rem;
+            }
+
+            .question-text {
+                font-size: 1.5rem;
+            }
+
+            .vinyl-wrapper {
+                width: 200px;
+                height: 200px;
+            }
+
+            .photo-slide {
+                width: 200px;
+                height: 260px;
+            }
+
+            .slideshow-container {
+                height: 300px;
+            }
+
+            .celebration-title {
+                font-size: 2.3rem;
+            }
+
+            .celebration-message .name {
+                font-size: 1.5rem;
+            }
+
+            .letter-content {
+                font-size: 0.9rem;
+            }
+
+            .gallery-title {
+                font-size: 1.7rem;
+            }
+        }
+
+        /* Improve text legibility */
+        @media (max-width: 480px) {
+            .screen {
+                padding: 15px;
+            }
+
+            .tap-hint, .tap-angel-hint {
+                font-size: 0.8rem;
+                bottom: 80px;
+            }
+
+            .promise-text {
+                font-size: 0.9rem;
+                padding: 0 15px;
+            }
+
+            .heart-divider span {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Hide scrollbar but allow scrolling */
+        .screen::-webkit-scrollbar {
+            display: none;
+        }
+
+        .screen {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio Element - Add your music.mp3 file to the project folder -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Elements -->
+    <div class="floating-elements" id="floatingElements"></div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots" id="navDots"></div>
+
+    <!-- Navigation Arrows -->
+    <button class="nav-arrow prev" id="prevBtn" onclick="prevScreen()">❮</button>
+    <button class="nav-arrow next" id="nextBtn" onclick="nextScreen()">❯</button>
+
+
+    <!-- Screens Container -->
+    <div class="screens-container" id="screensContainer">
+
+        <!-- SCREEN 1: Intro -->
+        <div class="screen active" id="screen1">
+            <div class="intro-content">
+                <svg class="tulip-bloom" viewBox="0 0 100 160">
+                    <ellipse cx="50" cy="30" rx="20" ry="28" fill="#ff6b8a"/>
+                    <ellipse cx="35" cy="38" rx="14" ry="22" fill="#ff8fa3"/>
+                    <ellipse cx="65" cy="38" rx="14" ry="22" fill="#ff8fa3"/>
+                    <rect x="46" y="55" width="8" height="90" fill="#4a7c4e"/>
+                    <ellipse cx="30" cy="100" rx="20" ry="8" fill="#5a9e5a" transform="rotate(-30 30 100)"/>
+                    <ellipse cx="70" cy="115" rx="20" ry="8" fill="#5a9e5a" transform="rotate(30 70 115)"/>
+                </svg>
+                <p class="intro-subtitle">A special message for</p>
+                <h1 class="intro-title script-text gradient-text">Idongesit</h1>
+                <p class="intro-message">Something beautiful awaits you... Take this journey with me 💕</p>
+            </div>
+            <p class="tap-hint">Tap anywhere or swipe to continue →</p>
+        </div>
+
+        <!-- SCREEN 2: My Angel -->
+        <div class="screen" id="screen2">
+            <div class="angel-container">
+                <p class="angel-title">You are and will always be...</p>
+                <h1 class="angel-name script-text gradient-text" onclick="releaseAngels(event)">
+                    <span class="wings left">👼</span>
+                    My Angel
+                    <span class="wings right">👼</span>
+                </h1>
+                <p class="angel-subtitle">Idongesit 🌷</p>
+                <p class="tap-angel-hint">✨ Tap "My Angel" for a surprise ✨</p>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: Naomi Sharon Vinyl -->
+        <div class="screen" id="screen3">
+            <div class="vinyl-container">
+                <p class="vinyl-intro">I know you love <span style="color: #ff6b8a; font-weight: 600;">Naomi Sharon</span>, so you'll love this... 🎵</p>
+
+                <div class="vinyl-wrapper">
+                    <div class="vinyl" id="vinyl">
+                        <div class="vinyl-grooves"></div>
+                    </div>
+                </div>
+
+                <div class="vinyl-controls">
+                    <button class="vinyl-btn" onclick="stopMusic()">⏹</button>
+                    <button class="vinyl-btn play-btn" id="playBtn" onclick="toggleMusic()">▶</button>
+                    <button class="vinyl-btn" onclick="stopMusic()">⏮</button>
+                </div>
+
+                <p class="song-title">Definition of Love</p>
+                <p class="song-artist">Naomi Sharon</p>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: Message 1 -->
+        <div class="screen" id="screen4">
+            <div class="message-screen">
+                <div class="message-icon">🌷</div>
+                <p class="message-text">Every moment with you feels like a <span class="highlight">beautiful dream</span> I never want to wake up from.</p>
+                <p class="message-subtitle">You're my favorite thought 💭</p>
+            </div>
+        </div>
+
+        <!-- SCREEN 5: Message 2 -->
+        <div class="screen" id="screen5">
+            <div class="message-screen">
+                <div class="message-icon">💕</div>
+                <p class="message-text">You make me <span class="highlight">smile</span> every single day, and my heart beats only for you.</p>
+                <p class="message-subtitle">My heart knows your name</p>
+            </div>
+        </div>
+
+        <!-- SCREEN 6: Message 3 -->
+        <div class="screen" id="screen6">
+            <div class="message-screen">
+                <div class="message-icon">✨</div>
+                <p class="message-text">Like a <span class="highlight">tulip</span> blooming in spring, you bring color and beauty into my life.</p>
+                <p class="message-subtitle">You are my sunshine 🌷</p>
+            </div>
+        </div>
+
+        <!-- SCREEN 7: Message 4 -->
+        <div class="screen" id="screen7">
+            <div class="message-screen">
+                <div class="message-icon">👼</div>
+                <p class="message-text">I call you <span class="highlight">My Angel</span> because that's exactly what you are to me.</p>
+                <p class="message-subtitle">Sent from heaven, just for me</p>
+            </div>
+        </div>
+
+        <!-- SCREEN 8: Photo Slideshow -->
+        <div class="screen" id="screen8">
+            <div class="gallery-screen">
+                <h2 class="gallery-title script-text gradient-text">My Beautiful Angel</h2>
+                <p class="gallery-subtitle">Every picture of you takes my breath away 📸</p>
+
+                <div class="slideshow-container" id="slideshowContainer">
+                    <!-- Photos will be dynamically loaded -->
+                </div>
+
+                <p class="photo-caption" id="photoCaption">You're stunning 💕</p>
+
+                <div class="slideshow-dots" id="slideshowDots"></div>
+
+                <div class="slideshow-controls">
+                    <button class="slide-btn" onclick="prevSlide()">❮</button>
+                    <button class="slide-btn" onclick="nextSlide()">❯</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 9: Love Letter -->
+        <div class="screen" id="screen9">
+            <div class="letter-screen">
+                <h2 class="letter-title script-text">"A Letter From My Heart" 💕</h2>
+
+                <div class="letter-container">
+                    <div class="letter-header">To my beautiful Idongesit...</div>
+
+                    <div class="letter-content">
+                        <p>I don't even know where to start, but I'll try.</p>
+
+                        <p>You know how people talk about finding "the one"? I never really understood what that meant until you came into my life. Now I get it. It's you. It's always been you.</p>
+
+                        <p>There's something about the way you laugh that makes everything feel okay. The way your eyes light up when you're excited about something. The way you look at me like I actually matter. I notice all of it, Idong. Every little thing.</p>
+
+                        <p>I'm not perfect. I mess up sometimes. I say the wrong things, I forget stuff, and I'm still figuring life out. But there's one thing I'm absolutely sure of — <strong>I love you.</strong> Not the kind of love you see in movies that fades after a few months. The real kind. The kind that makes me want to be better just because you exist.</p>
+
+                        <p>You're my peace when everything else is chaos. You're my smile on the hard days. You're the first person I want to tell when something good happens, and the only person I want beside me when things go wrong.</p>
+
+                        <p>I don't have all the answers, and I can't promise that life will always be easy. But I can promise you this — I will love you through it all. The good days, the bad days, the boring days, and the beautiful ones. All of them. With you.</p>
+
+                        <p>You are my angel, Idong. And I thank God every day that you're mine.</p>
+
+                        <p>I love you more than words could ever say. 🌷</p>
+                    </div>
+
+                    <div class="letter-signature">
+                        With love,<br>Dee ❤️
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 10: The Question -->
+        <div class="screen" id="screen10">
+            <div class="question-screen">
+                <div class="tulip-decoration">
+                    <svg viewBox="0 0 50 80">
+                        <ellipse cx="25" cy="15" rx="12" ry="15" fill="#ff6b8a"/>
+                        <ellipse cx="15" cy="20" rx="8" ry="12" fill="#ff8fa3"/>
+                        <ellipse cx="35" cy="20" rx="8" ry="12" fill="#ff8fa3"/>
+                        <rect x="23" y="28" width="4" height="45" fill="#4a7c4e"/>
+                    </svg>
+                    <svg viewBox="0 0 50 80">
+                        <ellipse cx="25" cy="15" rx="12" ry="15" fill="#ff4d6d"/>
+                        <ellipse cx="15" cy="20" rx="8" ry="12" fill="#ff6b8a"/>
+                        <ellipse cx="35" cy="20" rx="8" ry="12" fill="#ff6b8a"/>
+                        <rect x="23" y="28" width="4" height="45" fill="#4a7c4e"/>
+                    </svg>
+                    <svg viewBox="0 0 50 80">
+                        <ellipse cx="25" cy="15" rx="12" ry="15" fill="#ff6b8a"/>
+                        <ellipse cx="15" cy="20" rx="8" ry="12" fill="#ff8fa3"/>
+                        <ellipse cx="35" cy="20" rx="8" ry="12" fill="#ff8fa3"/>
+                        <rect x="23" y="28" width="4" height="45" fill="#4a7c4e"/>
+                    </svg>
+                </div>
+
+                <h1 class="question-name script-text gradient-text">Idongesit</h1>
+
+                <div class="heart-divider">
+                    <span>💗</span><span>💗</span><span>💗</span>
+                </div>
+
+                <p class="question-text">Will you be my Valentine? 💕</p>
+
+                <p class="promise-text">(I promise to buy you all the Lipton Ice Tea in Joy P's shop 😂)</p>
+
+                <div class="buttons-container">
+                    <button class="btn-yes" onclick="sayYes()">Yes! 💕</button>
+                    <button class="btn-no" id="noBtn" onmouseover="runAway()" ontouchstart="runAway()">No</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 11: Celebration -->
+        <div class="screen" id="screen11">
+            <div class="celebration-screen">
+                <span class="celebration-icon">💕</span>
+                <h1 class="celebration-title">She said Yes!</h1>
+                <p class="celebration-message">
+                    You've made me the happiest person alive.
+                    <span class="name">I love you, Idongesit</span>
+                    Happy Valentine's Day, My Angel.
+                </p>
+                <p class="celebration-footer">Forever yours 💕</p>
+                <div class="celebration-tulips">
+                    <span>🌷</span>
+                    <span>💗</span>
+                    <span>🌷</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================
+        // Configuration
+        // ============================================
+        const TOTAL_SCREENS = 11;
+        let currentScreen = 1;
+        let isPlaying = false;
+        let yesScale = 1;
+
+        // Photos with captions
+        const photos = [
+            { src: 'photos/photo2.jpg', caption: 'My beautiful angel 👼' },
+            { src: 'photos/photo3.jpg', caption: 'Absolutely stunning 💕' },
+            { src: 'photos/photo4.jpg', caption: 'You take my breath away ✨' },
+            { src: 'photos/photo5.jpg', caption: 'My favorite person 💗' },
+            { src: 'photos/photo6.jpg', caption: 'So gorgeous 🌷' },
+            { src: 'photos/photo7.jpg', caption: 'My whole heart 💖' },
+            { src: 'photos/photo8.jpg', caption: 'Perfect in every way 🤍' },
+            { src: 'photos/photo9.jpg', caption: 'You glow, baby ✨' },
+            { src: 'photos/photo10.jpg', caption: 'My queen 👑' },
+            { src: 'photos/photo11.jpg', caption: 'Always beautiful 💕' },
+            { src: 'photos/photo12.jpg', caption: 'I love this face 🥰' },
+            { src: 'photos/photo13.jpg', caption: 'My sweet Idong 💗' },
+            { src: 'photos/photo14.jpg', caption: 'Precious 💝' },
+            { src: 'photos/photo15.jpg', caption: 'You amaze me 🌷' },
+            { src: 'photos/photo16.jpg', caption: 'My everything 💕' },
+            { src: 'photos/photo17.jpg', caption: 'So pretty 💖' },
+            { src: 'photos/photo18.jpg', caption: 'I love you 💗' }
+        ];
+        let currentSlide = 0;
+        let slideInterval;
+
+        // ============================================
+        // Initialize
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            createNavDots();
+            createFloatingElements();
+            loadPhotos();
+            updateProgress();
+            updateNavButtons();
+
+            // Touch/Swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            document.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) nextScreen();
+                    else prevScreen();
+                }
+            }
+
+            // Keyboard support
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowRight' || e.key === ' ') nextScreen();
+                if (e.key === 'ArrowLeft') prevScreen();
+            });
+
+            // Click to advance (on certain screens)
+            document.addEventListener('click', e => {
+                if (currentScreen === 1 && !e.target.closest('.nav-arrow')) {
+                    nextScreen();
+                }
+            });
+        });
+
+        // ============================================
+        // Navigation
+        // ============================================
+        function createNavDots() {
+            const container = document.getElementById('navDots');
+            for (let i = 1; i <= TOTAL_SCREENS; i++) {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${i === 1 ? 'active' : ''}`;
+                dot.onclick = () => goToScreen(i);
+                container.appendChild(dot);
+            }
+        }
+
+        function updateNavDots() {
+            document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === currentScreen);
+            });
+        }
+
+        function updateProgress() {
+            const progress = ((currentScreen - 1) / (TOTAL_SCREENS - 1)) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentScreen === 1;
+            document.getElementById('nextBtn').style.display = currentScreen === TOTAL_SCREENS ? 'none' : 'flex';
+        }
+
+        function goToScreen(num) {
+            if (num < 1 || num > TOTAL_SCREENS || num === currentScreen) return;
+
+            const currentEl = document.getElementById(`screen${currentScreen}`);
+            const nextEl = document.getElementById(`screen${num}`);
+
+            currentEl.classList.remove('active');
+            currentEl.classList.add('exit-left');
+
+            setTimeout(() => {
+                currentEl.classList.remove('exit-left');
+            }, 600);
+
+            nextEl.classList.add('active');
+            currentScreen = num;
+
+            updateNavDots();
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function nextScreen() {
+            if (currentScreen < TOTAL_SCREENS) {
+                goToScreen(currentScreen + 1);
+            }
+        }
+
+        function prevScreen() {
+            if (currentScreen > 1) {
+                goToScreen(currentScreen - 1);
+            }
+        }
+
+        // ============================================
+        // Floating Elements
+        // ============================================
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+
+            setInterval(() => {
+                // Tulip
+                if (Math.random() > 0.6) {
+                    const tulip = document.createElement('div');
+                    tulip.className = 'tulip-float';
+                    tulip.style.left = Math.random() * 100 + 'vw';
+                    tulip.style.animationDuration = (10 + Math.random() * 8) + 's';
+                    tulip.innerHTML = '🌷';
+                    tulip.style.fontSize = (20 + Math.random() * 15) + 'px';
+                    container.appendChild(tulip);
+                    setTimeout(() => tulip.remove(), 18000);
+                }
+
+                // Heart
+                const heart = document.createElement('div');
+                heart.className = 'heart-float';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (8 + Math.random() * 6) + 's';
+                heart.innerHTML = ['💕', '💗', '💖', '💝', '🤍'][Math.floor(Math.random() * 5)];
+                heart.style.fontSize = (15 + Math.random() * 15) + 'px';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 14000);
+            }, 500);
+        }
+
+        // ============================================
+        // Angel Burst
+        // ============================================
+        function releaseAngels(event) {
+            const angels = ['👼', '😇', '💫', '✨', '🕊️', '💕', '🌟'];
+
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const angel = document.createElement('div');
+                    angel.className = 'flying-angel';
+                    angel.textContent = angels[Math.floor(Math.random() * angels.length)];
+                    angel.style.left = (event.clientX + (Math.random() - 0.5) * 100) + 'px';
+                    angel.style.top = (event.clientY + (Math.random() - 0.5) * 100) + 'px';
+                    angel.style.fontSize = (20 + Math.random() * 30) + 'px';
+                    document.body.appendChild(angel);
+                    setTimeout(() => angel.remove(), 2000);
+                }, i * 50);
+            }
+        }
+
+        // ============================================
+        // Music Player
+        // ============================================
+        const audio = document.getElementById('bgMusic');
+        const vinyl = document.getElementById('vinyl');
+        const playBtn = document.getElementById('playBtn');
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                vinyl.classList.remove('playing');
+                playBtn.innerHTML = '▶';
+            } else {
+                audio.play();
+                vinyl.classList.add('playing');
+                playBtn.innerHTML = '⏸';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function stopMusic() {
+            audio.pause();
+            audio.currentTime = 0;
+            vinyl.classList.remove('playing');
+            playBtn.innerHTML = '▶';
+            isPlaying = false;
+        }
+
+        // ============================================
+        // Photo Slideshow
+        // ============================================
+        function loadPhotos() {
+            const container = document.getElementById('slideshowContainer');
+            const dotsContainer = document.getElementById('slideshowDots');
+
+            photos.forEach((photo, index) => {
+                // Create slide
+                const slide = document.createElement('div');
+                slide.className = `photo-slide ${index === 0 ? 'active' : ''}`;
+                slide.innerHTML = `
+                    <div class="photo-frame">
+                        <img src="${photo.src}" alt="My Angel" onerror="this.style.display='none'">
+                    </div>
+                `;
+                container.appendChild(slide);
+
+                // Create dot
+                const dot = document.createElement('div');
+                dot.className = `slide-dot ${index === 0 ? 'active' : ''}`;
+                dot.onclick = () => goToSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+
+            updateSlideClasses();
+            startSlideshow();
+        }
+
+        function updateSlideClasses() {
+            const slides = document.querySelectorAll('.photo-slide');
+            const dots = document.querySelectorAll('.slide-dot');
+            const caption = document.getElementById('photoCaption');
+
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev', 'next');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index === (currentSlide - 1 + photos.length) % photos.length) {
+                    slide.classList.add('prev');
+                } else if (index === (currentSlide + 1) % photos.length) {
+                    slide.classList.add('next');
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+
+            if (caption && photos[currentSlide]) {
+                caption.textContent = photos[currentSlide].caption;
+            }
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % photos.length;
+            updateSlideClasses();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + photos.length) % photos.length;
+            updateSlideClasses();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlideClasses();
+        }
+
+        function startSlideshow() {
+            slideInterval = setInterval(() => {
+                if (currentScreen === 8) {
+                    nextSlide();
+                }
+            }, 3000);
+        }
+
+        // ============================================
+        // The Question - No Button
+        // ============================================
+        function runAway() {
+            const noBtn = document.getElementById('noBtn');
+            const container = noBtn.parentElement;
+            const rect = container.getBoundingClientRect();
+
+            const maxX = rect.width / 2 - 50;
+            const maxY = 150;
+
+            const newX = (Math.random() - 0.5) * maxX * 2;
+            const newY = (Math.random() - 0.5) * maxY * 2;
+
+            noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
+
+            // Make Yes button bigger
+            yesScale += 0.08;
+            document.querySelector('.btn-yes').style.transform = `scale(${Math.min(yesScale, 1.5)})`;
+        }
+
+        // ============================================
+        // Celebration
+        // ============================================
+        function sayYes() {
+            goToScreen(11);
+            launchConfetti();
+        }
+
+        function launchConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const emojis = ['💕', '💗', '🌷', '💝', '✨'];
+
+            // Initial burst - reduced amount
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.fontSize = (18 + Math.random() * 15) + 'px';
+                    confetti.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    confetti.style.opacity = '0.8';
+                    confetti.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                    container.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 60);
+            }
+
+            // Gentle continuous confetti
+            setTimeout(() => {
+                for (let i = 0; i < 25; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = Math.random() * 100 + 'vw';
+                        confetti.style.fontSize = (15 + Math.random() * 12) + 'px';
+                        confetti.style.animationDuration = (3 + Math.random() * 2) + 's';
+                        confetti.style.opacity = '0.6';
+                        confetti.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                        container.appendChild(confetti);
+                        setTimeout(() => confetti.remove(), 5000);
+                    }, i * 100);
+                }
+            }, 2500);
+        }
+
+        // Close modal on escape
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
