@@ -815,10 +815,12 @@
         .buttons-container {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 25px;
             position: relative;
-            min-height: 80px;
+            min-height: 120px;
+            width: 100%;
+            max-width: 400px;
         }
 
         .btn-yes {
@@ -836,6 +838,8 @@
             position: relative;
             overflow: hidden;
             letter-spacing: 1px;
+            z-index: 2;
+            flex-shrink: 0;
         }
 
         .btn-yes:hover {
@@ -868,8 +872,10 @@
             font-family: 'Lora', serif;
             font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: absolute;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
         }
 
         /* ============================================
@@ -1704,21 +1710,29 @@
         // ============================================
         // The Question - No Button
         // ============================================
+        let noTapCount = 0;
+        const MAX_NO_TAPS = 8;
+
         function runAway() {
+            noTapCount++;
             const noBtn = document.getElementById('noBtn');
-            const container = noBtn.parentElement;
-            const rect = container.getBoundingClientRect();
 
-            const maxX = rect.width / 2 - 50;
-            const maxY = 150;
-
-            const newX = (Math.random() - 0.5) * maxX * 2;
-            const newY = (Math.random() - 0.5) * maxY * 2;
+            // Limit movement range
+            const maxOffset = 120;
+            const newX = (Math.random() - 0.5) * maxOffset * 2;
+            const newY = (Math.random() - 0.5) * maxOffset;
 
             noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
 
-            yesScale += 0.08;
-            document.querySelector('.btn-yes').style.transform = `scale(${Math.min(yesScale, 1.5)})`;
+            // Grow Yes button gradually, cap at 1.4x
+            yesScale = Math.min(1 + (noTapCount * 0.05), 1.4);
+            document.querySelector('.btn-yes').style.transform = `scale(${yesScale})`;
+
+            // After max taps, make No button disappear
+            if (noTapCount >= MAX_NO_TAPS) {
+                noBtn.style.opacity = '0';
+                noBtn.style.pointerEvents = 'none';
+            }
         }
 
         // ============================================
