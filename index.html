@@ -1092,13 +1092,19 @@
                 font-size: 3.5rem;
             }
 
+            .buttons-container {
+                gap: 15px;
+                min-height: 100px;
+                max-width: 320px;
+            }
+
             .btn-yes {
-                padding: 15px 45px;
-                font-size: 1.15rem;
+                padding: 14px 35px;
+                font-size: 1.1rem;
             }
 
             .btn-no {
-                padding: 12px 30px;
+                padding: 12px 28px;
                 font-size: 0.9rem;
             }
 
@@ -1123,6 +1129,21 @@
 
             .question-text {
                 font-size: 1.8rem;
+            }
+
+            .buttons-container {
+                gap: 12px;
+                max-width: 280px;
+            }
+
+            .btn-yes {
+                padding: 12px 28px;
+                font-size: 1rem;
+            }
+
+            .btn-no {
+                padding: 10px 22px;
+                font-size: 0.85rem;
             }
 
             .vinyl-wrapper {
@@ -1717,10 +1738,12 @@
             noTapCount++;
             const noBtn = document.getElementById('noBtn');
 
-            // Limit movement range
-            const maxOffset = 120;
-            const newX = (Math.random() - 0.5) * maxOffset * 2;
-            const newY = (Math.random() - 0.5) * maxOffset;
+            // Smaller movement on mobile
+            const isMobile = window.innerWidth <= 768;
+            const maxOffsetX = isMobile ? 60 : 120;
+            const maxOffsetY = isMobile ? 40 : 80;
+            const newX = (Math.random() - 0.5) * maxOffsetX * 2;
+            const newY = (Math.random() - 0.5) * maxOffsetY * 2;
 
             noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
 
